@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - SE2 Email Animation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1628 100%);
+            position: relative;
+        }
+
+        /* CIRCUIT BOARD BACKGROUND */
+        .circuit-board {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .circuit-board svg {
+            width: 100%;
+            height: 100%;
+            animation: circuitFlow 8s linear infinite;
+        }
+
+        @keyframes circuitFlow {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(100px);
+            }
+        }
+
+        /* GRID LINES BACKGROUND */
+        .grid-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridScroll 10s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes gridScroll {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 50px 50px;
+            }
+        }
+
+        /* FLOATING PARTICLES */
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(0, 212, 170, 0.5);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        /* CONTAINER */
+        .animation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        /* SCREEN FRAME */
+        .screen {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(135deg, #1a2f5a 0%, #0f1f3a 100%);
+            border: 3px solid #00d4aa;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 40px rgba(0, 212, 170, 0.6),
+                0 0 80px rgba(0, 212, 170, 0.3),
+                inset 0 0 40px rgba(0, 212, 170, 0.1);
+            overflow: hidden;
+            animation: screenPulse 3s ease-in-out infinite;
+        }
+
+        .screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 170, 0.03) 50%, transparent 100%);
+            animation: screenFlicker 0.15s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes screenPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 40px rgba(0, 212, 170, 0.6),
+                    0 0 80px rgba(0, 212, 170, 0.3),
+                    inset 0 0 40px rgba(0, 212, 170, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 0 60px rgba(0, 212, 170, 0.8),
+                    0 0 120px rgba(0, 212, 170, 0.5),
+                    inset 0 0 60px rgba(0, 212, 170, 0.2);
+            }
+        }
+
+        @keyframes screenFlicker {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.05;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* SCREEN CONTENT */
+        .screen-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            animation: contentFadeIn 0.8s ease-in-out forwards;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes contentFadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .screen-content h2 {
+            color: #00d4aa;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            animation: textGlow 2s ease-in-out infinite;
+            animation-delay: 2.5s;
+        }
+
+        .screen-content p {
+            color: #00d4aa;
+            font-size: 18px;
+            font-weight: 500;
+            word-break: break-all;
+            text-shadow: 0 0 10px rgba(0, 212, 170, 0.8);
+            animation: emailGlow 2s ease-in-out infinite;
+            animation-delay: 2.8s;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                text-shadow: 0 0 5px rgba(0, 212, 170, 0.5), 0 0 10px rgba(0, 212, 170, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(0, 212, 170, 1), 0 0 30px rgba(0, 212, 170, 0.6);
+            }
+        }
+
+        @keyframes emailGlow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(0, 212, 170, 0.8), 0 0 20px rgba(0, 212, 170, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 25px rgba(0, 212, 170, 1), 0 0 40px rgba(0, 212, 170, 0.7);
+            }
+        }
+
+        /* FLYING EMAIL ICON */
+        .flying-mail {
+            position: absolute;
+            left: -200px;
+            top: -100px;
+            z-index: 20;
+            animation: flyMail 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes flyMail {
+            0% {
+                left: -200px;
+                top: -100px;
+                transform: translate(0, 0) rotateX(0deg) rotateY(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                left: 50%;
+                top: 20%;
+                transform: translate(-50%, -50%) rotateX(30deg) rotateY(40deg) scale(1.1);
+            }
+            80% {
+                left: 50%;
+                top: 35%;
+                transform: translate(-50%, -50%) rotateX(15deg) rotateY(20deg) scale(1);
+            }
+            100% {
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .mail-icon {
+            width: 120px;
+            height: 100px;
+            background: linear-gradient(135deg, #00d4aa 0%, #00bcd4 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            box-shadow: 
+                0 0 30px rgba(0, 212, 170, 0.8),
+                0 0 60px rgba(0, 212, 170, 0.5),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transform-style: preserve-3d;
+            animation: mailRotate 1s linear infinite;
+        }
+
+        .mail-icon::before {
+            content: '';
+            position: absolute;
+            width: 140px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), transparent);
+            border-radius: 20px;
+            filter: blur(20px);
+            z-index: -1;
+            animation: glowPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes mailRotate {
+            0% {
+                transform: rotateZ(0deg);
+            }
+            100% {
+                transform: rotateZ(360deg);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* NEON LINES */
+        .neon-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, #00d4aa, transparent);
+            pointer-events: none;
+        }
+
+        .line-1 {
+            width: 300px;
+            height: 2px;
+            top: 30%;
+            left: -300px;
+            animation: lineSlide 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            box-shadow: 0 0 10px rgba(0, 212, 170, 0.8);
+        }
+
+        .line-2 {
+            width: 300px;
+            height: 2px;
+            bottom: 30%;
+            right: -300px;
+            animation: lineSlideRight 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            box-shadow: 0 0 10px rgba(0, 212, 170, 0.8);
+        }
+
+        @keyframes lineSlide {
+            0% {
+                left: -300px;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                left: calc(50% + 100px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes lineSlideRight {
+            0% {
+                right: -300px;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                right: calc(50% + 100px);
+                opacity: 0;
+            }
+        }
+
+        /* CONTACT INFO BELOW */
+        .contact-info-section {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 15;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 3.2s;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .contact-info-section p {
+            color: #00d4aa;
+            font-size: 14px;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px rgba(0, 212, 170, 0.6);
+        }
+
+        .contact-info-section a {
+            color: #00d4aa;
+            text-decoration: none;
+            border-bottom: 2px solid #00d4aa;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info-section a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            border-bottom-color: #00ffff;
+        }
+
+        /* BACK BUTTON */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            opacity: 0;
+            animation: fadeInDown 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(0, 212, 170, 0.1));
+            border: 2px solid #00d4aa;
+            color: #00d4aa;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 170, 0.3);
+        }
+
+        .back-button a:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.4), rgba(0, 212, 170, 0.2));
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.6);
+            transform: translateX(-5px);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .screen {
+                width: 300px;
+                height: 250px;
+            }
+
+            .mail-icon {
+                width: 80px;
+                height: 70px;
+                font-size: 40px;
+            }
+
+            .contact-info-section {
+                bottom: 20px;
+            }
+
+            .screen-content p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- CIRCUIT BOARD BACKGROUND -->
+    <div class="circuit-board">
+        <svg viewBox="0 0 1000 1000">
+            <!-- Horizontal lines -->
+            <line x1="0" y1="100" x2="1000" y2="100" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="200" x2="1000" y2="200" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="300" x2="1000" y2="300" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="400" x2="1000" y2="400" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="500" x2="1000" y2="500" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="600" x2="1000" y2="600" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="700" x2="1000" y2="700" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="800" x2="1000" y2="800" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="0" y1="900" x2="1000" y2="900" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            
+            <!-- Vertical lines -->
+            <line x1="100" y1="0" x2="100" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="200" y1="0" x2="200" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="300" y1="0" x2="300" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="400" y1="0" x2="400" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="500" y1="0" x2="500" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="600" y1="0" x2="600" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="700" y1="0" x2="700" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="800" y1="0" x2="800" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            <line x1="900" y1="0" x2="900" y2="1000" stroke="#00d4aa" stroke-width="0.5" opacity="0.3"/>
+            
+            <!-- Circles -->
+            <circle cx="100" cy="100" r="5" fill="#00d4aa" opacity="0.4"/>
+            <circle cx="900" cy="900" r="5" fill="#00d4aa" opacity="0.4"/>
+            <circle cx="500" cy="500" r="8" fill="#00d4aa" opacity="0.3"/>
+        </svg>
+    </div>
+
+    <!-- GRID BACKGROUND -->
+    <div class="grid-background"></div>
+
+    <!-- FLOATING PARTICLES -->
+    <script>
+        function createParticles() {
+            const container = document.body;
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * window.innerHeight;
+                const endX = (Math.random() - 0.5) * 200;
+                const endY = (Math.random() - 0.5) * 200;
+                
+                particle.style.left = startX + 'px';
+                particle.style.top = startY + 'px';
+                particle.style.setProperty('--tx', endX + 'px');
+                particle.style.setProperty('--ty', endY + 'px');
+                particle.style.animationDelay = (Math.random() * 6) + 's';
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+    </script>
+
+    <!-- NEON LINES -->
+    <div class="neon-line line-1"></div>
+    <div class="neon-line line-2"></div>
+
+    <!-- ANIMATION CONTAINER -->
+    <div class="animation-container">
+        <!-- FLYING MAIL -->
+        <div class="flying-mail">
+            <div class="mail-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+        </div>
+
+        <!-- SCREEN FRAME -->
+        <div class="screen">
+            <div class="screen-content">
+                <h2>📧 Contact Us</h2>
+                <p>se2.support.community<br>@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT INFO SECTION -->
+    <div class="contact-info-section">
+        <p>📞 Call Us: <a href="tel:+8801410789018">+8801410789018</a></p>
+        <p>🌐 Visit: <a href="index.html">Back to SE2</a></p>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="back-button">
+        <a href="index.html">
+            <i class="fas fa-arrow-left"></i> Home
+        </a>
+    </div>
+</body>
+</html>
